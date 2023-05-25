@@ -14,8 +14,9 @@ class CondoAdapter() : RecyclerView.Adapter<CondoAdapter.CondoViewHolder>() {
 
     private var itemList: List<CondoUnit> = listOf()
 
-    fun setUnities(itemList:List<CondoUnit>){
+    fun setUnities(itemList: List<CondoUnit>) {
         this.itemList = itemList
+        notifyDataSetChanged()
     }
 
 

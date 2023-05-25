@@ -1,52 +1,51 @@
 package com.example.condounitrecycler.viewmodel
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.condounitrecycler.main.MainRepository
 import com.example.condounitrecycler.ui.CondoUnit
+import kotlinx.coroutines.launch
+import java.util.Locale
 
-class MainViewModel : ViewModel() {
+class MainViewModel(private val repository: MainRepository = MainRepository()) : ViewModel() {
 
-    private val _unitiesList : MutableList<CondoUnit> = makeCondoMockData()
-    val unitiesList: List<CondoUnit> = _unitiesList
+    private val _unitiesList: MutableLiveData<List<CondoUnit>> = MutableLiveData()
+    val unitiesList: LiveData<List<CondoUnit>> = _unitiesList
+    private val allUnities: MutableList<CondoUnit> = mutableListOf()
 
-    fun makeCondoMockData(): MutableList<CondoUnit> {
-        return mutableListOf(
-            CondoUnit(
-                id = "1",
-                unitName = "Unidade #1",
-                unitDescription = "belissima unidade...",
-                unitPicture = "https://s2.glbimg.com/itGGFP4ZIy-S5LKl0GZe20LiFLI=/512x320/smart/e.glbimg.com/og/ed/f/original/2019/07/16/rihanna_hhr15.jpg"
-            ),
-            CondoUnit(
-                id = "2",
-                unitName = "Unidade #2",
-                unitDescription = "belissima unidade...",
-                unitPicture = "https://imagens-revista.vivadecora.com.br/uploads/2016/10/65243-casas-bonitas-fachada-stancati-viva-decora.jpg"
-            ),
-            CondoUnit(
-                id = "3",
-                unitName = "Unidade #3",
-                unitDescription = "belissima unidade...",
-                unitPicture = "https://www.tuacasa.com.br/wp-content/uploads/2015/06/fachadas-de-casas-000.jpg"
-            ),
-            CondoUnit(
-                id = "4",
-                unitName = "Unidade #4",
-                unitDescription = "belissima unidade...",
-                unitPicture = "https://www.tuacasa.com.br/wp-content/uploads/2019/02/fachadas-de-casas-modernas-0-1200x675.jpg"
-            ),
-            CondoUnit(
-                id = "5",
-                unitName = "Unidade #5",
-                unitDescription = "belissima unidade...",
-                unitPicture = "https://www.tuacasa.com.br/wp-content/uploads/2019/05/fachadas-de-casas-simples-0.jpg"
-            ),
-            CondoUnit(
-                id = "6",
-                unitName = "Unidade #6",
-                unitDescription = "belissima unidade...",
-                unitPicture = "https://img.freepik.com/fotos-gratis/villa-com-piscina-de-luxo-espetacular-design-contemporaneo-arte-digital-imoveis-casa-casa-e-propriedade-ge_1258-150765.jpg"
-            )
-        )
+
+    init {
+        fetchUnitData()
+    }
+
+    fun onQueryChanged(query: String) {
+        if (query.isEmpty()) {
+            _unitiesList.value = allUnities.toList()
+        } else {
+            val filteredList = allUnities.filter { unit ->
+                unit.unitName.containsIgnoreCase(query)
+            }
+            _unitiesList.value = filteredList
+        }
+    }
+
+    fun String.containsIgnoreCase(other: String): Boolean {
+        return this.lowercase(Locale.ROOT).contains(other.lowercase(Locale.ROOT))
+    }
+
+    private fun fetchUnitData() {
+        viewModelScope.launch {
+            val result = repository.getUnities()
+            if (result.isSuccess) {
+                allUnities.clear()
+                allUnities.addAll(result.getOrDefault(listOf()))
+                _unitiesList.value = allUnities
+            } else {
+                println("houve bug")
+            }
+        }
     }
 
 }
