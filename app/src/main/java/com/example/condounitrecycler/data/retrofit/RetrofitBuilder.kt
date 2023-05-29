@@ -1,4 +1,4 @@
-package com.example.condounitrecycler.retrofit
+package com.example.condounitrecycler.data.retrofit
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

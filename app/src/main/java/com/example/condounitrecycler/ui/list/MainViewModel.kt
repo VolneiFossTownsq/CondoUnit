@@ -1,11 +1,11 @@
-package com.example.condounitrecycler.viewmodel
+package com.example.condounitrecycler.ui.list
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.condounitrecycler.main.MainRepository
-import com.example.condounitrecycler.ui.CondoUnit
+import com.example.condounitrecycler.data.models.CondoUnit
 import kotlinx.coroutines.launch
 import java.util.Locale
 
@@ -13,6 +13,7 @@ class MainViewModel(private val repository: MainRepository = MainRepository()) :
 
     private val _unitiesList: MutableLiveData<List<CondoUnit>> = MutableLiveData()
     val unitiesList: LiveData<List<CondoUnit>> = _unitiesList
+
     private val allUnities: MutableList<CondoUnit> = mutableListOf()
 
 

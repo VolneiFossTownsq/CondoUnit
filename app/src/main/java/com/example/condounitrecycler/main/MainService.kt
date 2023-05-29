@@ -1,6 +1,6 @@
 package com.example.condounitrecycler.main
 
-import com.example.condounitrecycler.ui.CondoUnit
+import com.example.condounitrecycler.data.models.CondoUnit
 import retrofit2.Response
 import retrofit2.http.GET
 

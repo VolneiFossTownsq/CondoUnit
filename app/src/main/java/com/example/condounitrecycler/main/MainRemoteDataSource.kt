@@ -1,7 +1,7 @@
 package com.example.condounitrecycler.main
 
-import com.example.condounitrecycler.retrofit.RetrofitBuilder
-import com.example.condounitrecycler.ui.CondoUnit
+import com.example.condounitrecycler.data.retrofit.RetrofitBuilder
+import com.example.condounitrecycler.data.models.CondoUnit
 
 class MainRemoteDataSource {
 
